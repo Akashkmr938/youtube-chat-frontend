@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://127.0.0.1:4001";
 
-var expression =
+const expression =
   "^(http://www.|https://www.|http://|https://)?[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$";
+
 const Input = () => {
   const [fields, setFields] = useState([{ value: null }]);
   const [streamUrl, setStreamUrl] = useState("");
@@ -13,9 +16,11 @@ const Input = () => {
   };
 
   const handleAdd = () => {
-    const values = [...fields];
-    values.push({ value: null });
-    setFields(values);
+    if (fields.length < 10) {
+      const values = [...fields];
+      values.push({ value: null });
+      setFields(values);
+    }
   };
 
   const handleRemove = (index) => {
@@ -25,14 +30,25 @@ const Input = () => {
   };
 
   const subscribeToYoutubeStream = () => {
-    console.log("Called");
     var regex = new RegExp(expression);
     if (streamUrl === "" || !streamUrl.match(regex)) {
       console.log("Invalid URL");
     } else {
-      console.log("URL: ", streamUrl);
-      fields.forEach((field) => {
-        console.log(field.value);
+      const socket = socketIOClient(ENDPOINT);
+      const keywords = fields.reduce((resultant, field) => {
+        if (field.value) {
+          resultant.push(field.value);
+        }
+        return resultant;
+      }, []);
+
+      socket.emit("streamDetails", {
+        url: streamUrl.split("v=")[1].substring(0, streamUrl.length - 1),
+        keywords: keywords,
+        loginDetails: window.gapi.auth2
+          .getAuthInstance()
+          .currentUser.get()
+          .getAuthResponse(),
       });
     }
   };
