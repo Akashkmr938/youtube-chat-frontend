@@ -1,11 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import socketIOClient from "socket.io-client";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+
+const useStyles = makeStyles((theme) => ({
+  urlText: {
+    width: "100%",
+    margin: "20px 0px 20px 0px",
+  },
+  removeButton: {
+    margin: "10px 10px 0px 10px",
+  },
+  subscribeButton: {
+    "&:hover": {
+      backgroundColor: "brown",
+    },
+    backgroundColor: "brown",
+    marginTop: "20px",
+  },
+}));
+
 const ENDPOINT = "http://127.0.0.1:4001";
 
 const expression =
   "^(http://www.|https://www.|http://|https://)?[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$";
 
 const Input = () => {
+  const classes = useStyles();
   const [fields, setFields] = useState([{ value: null }]);
   const [streamUrl, setStreamUrl] = useState("");
 
@@ -54,35 +79,56 @@ const Input = () => {
   };
 
   return (
-    <div>
-      <input
+    <div className={classes.root}>
+      <TextField
+        className={classes.urlText}
+        id="outlined-basic"
+        label="Youtube stream URL"
+        variant="outlined"
         type="text"
         value={streamUrl}
         onChange={(event) => setStreamUrl(event.target.value)}
-        placeholder="Enter Youtube stream URL"
       />
       <div>
-        <button type="button" onClick={handleAdd}>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleAdd}
+          endIcon={<AddIcon></AddIcon>}
+        >
           Keywords
-        </button>
-        {fields.map((field, idx) => {
-          return (
-            <div key={`${field}-${idx}`}>
-              <input
-                type="text"
-                placeholder="Enter text"
-                value={field.value || ""}
-                onChange={(e) => handleChange(idx, e)}
-              />
-              <button type="button" onClick={() => handleRemove(idx)}>
-                X
-              </button>
-            </div>
-          );
-        })}
+        </Button>
+        <div>
+          {fields.map((field, idx) => {
+            return (
+              <Fragment key={`${field}-${idx}`}>
+                <TextField
+                  id="standard-basic"
+                  label={`keyword ${idx + 1}`}
+                  value={field.value || ""}
+                  onChange={(e) => handleChange(idx, e)}
+                />
+                <IconButton
+                  className={classes.removeButton}
+                  aria-label="remove keyword"
+                  onClick={() => handleRemove(idx)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Fragment>
+            );
+          })}
+        </div>
       </div>
 
-      <button onClick={subscribeToYoutubeStream}>Subscribe</button>
+      <Button
+        className={classes.subscribeButton}
+        variant="contained"
+        color="primary"
+        onClick={subscribeToYoutubeStream}
+      >
+        Subscribe
+      </Button>
     </div>
   );
 };

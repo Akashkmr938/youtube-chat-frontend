@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import logo from "../assets/img/google-icon.png";
+
+const useStyles = makeStyles((theme) => ({
+  img: {
+    paddingRight: "10px",
+  },
+}));
 
 const Login = (props) => {
+  const classes = useStyles();
+
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -46,9 +57,15 @@ const Login = (props) => {
     return (
       <>
         {loggedIn ? (
-          <button onClick={onSignOutClick}>Google Logout</button>
+          <Button variant="contained" color="primary" onClick={onSignOutClick}>
+            <img className={classes.img} src={logo} alt="google" />
+            Google Logout
+          </Button>
         ) : (
-          <button onClick={onSignInClick}>Google Login</button>
+          <Button variant="contained" color="primary" onClick={onSignInClick}>
+            <img className={classes.img} src={logo} alt="google" />
+            Google Login
+          </Button>
         )}
       </>
     );
