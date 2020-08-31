@@ -9,7 +9,10 @@ import MySnackbar from "./snackbar/snackbar";
 const useStyles = makeStyles(() => ({
   app: {
     textAlign: "center",
-    margin: "200px",
+    top: "25%",
+    left: "25%",
+    position: "fixed",
+    width: "50%",
   },
   chatApp: {
     textAlign: "center",
