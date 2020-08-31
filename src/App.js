@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Login from "./login/login";
 import Input from "./input/input";
 import LiveChat from "./live-chat/live-chat";
@@ -26,19 +26,12 @@ const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
 
-  useEffect(() => {
-    socket.on("chatMessages", (data) => {
-      console.log("event caught");
-      setChatMessages((prev) => [...prev, ...data]);
-    });
-  }, []);
-
   const handleLoggedIn = (loggedIn) => {
     setLoggedIn(loggedIn);
   };
 
   const unsubscribeChat = () => {
-    socket.emit("disconnect");
+    socket.emit("closeConnection");
     setChatMessages([]);
   };
 
@@ -47,7 +40,6 @@ const App = () => {
     if (streamUrl === "" || !regex.test(streamUrl)) {
       snackbar.current.handleClick("Invalid URL");
     } else {
-      const socket = socketIOClient(ENDPOINT);
       const keywords = fields.reduce((resultant, field) => {
         if (field.value) {
           resultant.push(field.value);
@@ -62,6 +54,10 @@ const App = () => {
           .getAuthInstance()
           .currentUser.get()
           .getAuthResponse(),
+      });
+      socket.on("chatMessages", (data) => {
+        console.log("event caught");
+        setChatMessages((prev) => [...prev, ...data]);
       });
     }
   };

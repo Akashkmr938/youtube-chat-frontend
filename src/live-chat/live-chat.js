@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
+import ScrollToBottom from "react-scroll-to-bottom";
 
 const useStyles = makeStyles((theme) => ({
   time: {
@@ -24,9 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
   mainContainer: {
     margin: "0 auto",
-    maxHeight: "600px",
-    minHeight: "600px",
-    overflow: "scroll",
+    height: "600px",
     width: "40%",
     textAlign: "left",
     backgroundColor: "dimgrey",
@@ -41,7 +40,7 @@ const LiveChat = (props) => {
   return (
     <div>
       <h1>Live Chat</h1>
-      <div className={classes.mainContainer}>
+      <ScrollToBottom className={classes.mainContainer}>
         {props.chatMessages.map((message) => {
           return (
             <div className={classes.container} key={message.etag}>
@@ -60,7 +59,7 @@ const LiveChat = (props) => {
             </div>
           );
         })}
-      </div>
+      </ScrollToBottom>
       <div>
         <Button
           className={classes.btnUnsubscribe}
