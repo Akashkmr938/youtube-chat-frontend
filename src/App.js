@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
 
 const expression = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})?$/;
 const ENDPOINT = "http://127.0.0.1:4001";
-const socket = socketIOClient(ENDPOINT);
+let socket;
 
 const App = () => {
   const snackbar = useRef();
@@ -47,18 +47,31 @@ const App = () => {
         return resultant;
       }, []);
 
-      socket.emit("streamDetails", {
+      const payload = {
         url: streamUrl.split("v=")[1].substring(0, streamUrl.length - 1),
         keywords: Array.from(new Set(keywords)),
         loginDetails: window.gapi.auth2
           .getAuthInstance()
           .currentUser.get()
           .getAuthResponse(),
-      });
-      socket.on("chatMessages", (data) => {
-        console.log("event caught");
-        setChatMessages((prev) => [...prev, ...data]);
-      });
+      };
+
+      fetch(ENDPOINT + "/streamData", {
+        method: "post",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const mainSocket = socketIOClient(ENDPOINT);
+          socket = mainSocket;
+          mainSocket.on("chatMessages", (data) => {
+            console.log(data);
+            setChatMessages((prev) => [...prev, ...data]);
+          });
+        });
     }
   };
 
