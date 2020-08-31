@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from "react";
-import socketIOClient from "socket.io-client";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -24,12 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ENDPOINT = "http://127.0.0.1:4001";
-
-const expression =
-  "^(http://www.|https://www.|http://|https://)?[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$";
-
-const Input = () => {
+const Input = (props) => {
   const classes = useStyles();
   const [fields, setFields] = useState([{ value: null }]);
   const [streamUrl, setStreamUrl] = useState("");
@@ -55,27 +49,7 @@ const Input = () => {
   };
 
   const subscribeToYoutubeStream = () => {
-    var regex = new RegExp(expression);
-    if (streamUrl === "" || !streamUrl.match(regex)) {
-      console.log("Invalid URL");
-    } else {
-      const socket = socketIOClient(ENDPOINT);
-      const keywords = fields.reduce((resultant, field) => {
-        if (field.value) {
-          resultant.push(field.value);
-        }
-        return resultant;
-      }, []);
-
-      socket.emit("streamDetails", {
-        url: streamUrl.split("v=")[1].substring(0, streamUrl.length - 1),
-        keywords: keywords,
-        loginDetails: window.gapi.auth2
-          .getAuthInstance()
-          .currentUser.get()
-          .getAuthResponse(),
-      });
-    }
+    props.subscribeToYoutubeStream(streamUrl, fields);
   };
 
   return (
