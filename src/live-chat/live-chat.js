@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     borderColor: "#ccc",
     backgroundColor: "#ddd",
     display: "flow-root",
-    margin: "3px 0",
+    margin: "5px 10px",
   },
   mainContainer: {
     margin: "0 auto",
@@ -44,7 +44,7 @@ const LiveChat = (props) => {
       <div className={classes.mainContainer}>
         {props.chatMessages.map((message) => {
           return (
-            <div className={classes.container} key={message.id}>
+            <div className={classes.container} key={message.etag}>
               <img
                 src={message.authorDetails.profileImageUrl}
                 alt="Avatar"

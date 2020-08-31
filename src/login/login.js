@@ -16,7 +16,7 @@ const Login = (props) => {
 
   useEffect(() => {
     props.handleLoggedIn(loggedIn);
-  }, [loggedIn]);
+  }, [props, loggedIn]);
 
   useEffect(() => {
     if (window.gapi) {
