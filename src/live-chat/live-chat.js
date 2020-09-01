@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "dimgrey",
   },
   btnUnsubscribe: {
+    "&:hover": {
+      backgroundColor: "brown",
+    },
     backgroundColor: "firebrick",
     margin: "20px",
   },
