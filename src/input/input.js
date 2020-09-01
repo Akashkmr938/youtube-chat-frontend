@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -27,6 +27,12 @@ const Input = (props) => {
   const classes = useStyles();
   const [fields, setFields] = useState([{ value: null }]);
   const [streamUrl, setStreamUrl] = useState("");
+
+  useEffect(() => {
+    setStreamUrl(
+      sessionStorage.getItem("url") ? sessionStorage.getItem("url") : ""
+    );
+  }, []);
 
   const handleChange = (index, event) => {
     const values = [...fields];

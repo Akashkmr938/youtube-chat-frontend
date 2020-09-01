@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "5px 10px",
   },
   mainContainer: {
+    borderRadius: "10px",
     margin: "0 auto",
     height: "600px",
     width: "40%",
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   btnUnsubscribe: {
     backgroundColor: "firebrick",
+    margin: "20px",
   },
 }));
 
