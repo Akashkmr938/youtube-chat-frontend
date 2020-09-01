@@ -23,8 +23,7 @@ const Login = (props) => {
       window.gapi.load("client:auth2", () => {
         window.gapi.client
           .init({
-            clientId:
-              "245046245085-aqtiof6fnq42g2u1uooag9q9j028h9i4.apps.googleusercontent.com",
+            clientId: process.env.REACT_APP_CLIENT_ID,
             scope: "email",
           })
           .then(() => {
