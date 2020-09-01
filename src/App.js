@@ -20,7 +20,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 const expression = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})?$/;
-const ENDPOINT = "http://127.0.0.1:4001";
+const ENDPOINT =
+  process.env.NODE_ENV === "development"
+    ? "http://127.0.0.1:4001"
+    : "https://youtube-live-chat-nodejs.herokuapp.com/";
 let socket;
 
 const App = () => {
