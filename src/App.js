@@ -23,7 +23,7 @@ const expression = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:e
 const ENDPOINT =
   process.env.NODE_ENV === "development"
     ? "http://127.0.0.1:4001"
-    : "https://youtube-live-chat-nodejs.herokuapp.com/";
+    : "https://youtube-live-chat-nodejs.herokuapp.com";
 let socket;
 
 const App = () => {
