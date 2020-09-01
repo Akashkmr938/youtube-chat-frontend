@@ -36,7 +36,7 @@ const MySnackbar = forwardRef((props, ref) => {
       <Snackbar
         open={state.open}
         onClose={handleClose}
-        autoHideDuration={2000}
+        autoHideDuration={4000}
         TransitionComponent={SlideTransition}
         message={state.message}
       />

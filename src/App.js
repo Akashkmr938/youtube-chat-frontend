@@ -35,6 +35,7 @@ const App = () => {
 
   const unsubscribeChat = () => {
     socket.emit("closeConnection");
+    socket.disconnect();
     setChatMessages([]);
   };
 
@@ -68,11 +69,18 @@ const App = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          const mainSocket = socketIOClient(ENDPOINT);
-          socket = mainSocket;
-          mainSocket.on("chatMessages", (data) => {
+          socket = socketIOClient(ENDPOINT);
+          socket.on("chatMessages", (data) => {
             console.log(data);
             setChatMessages((prev) => [...prev, ...data]);
+          });
+
+          socket.on("error", (message) => {
+            snackbar.current.handleClick(message);
+          });
+
+          socket.on("closeSocket", () => {
+            socket.disconnect();
           });
         });
     }
